@@ -1,6 +1,6 @@
 from abc import ABC
 
 
-class DataLoader(ABC):
+class DataLoaderBase(ABC):
     def __init__(self):
         pass
