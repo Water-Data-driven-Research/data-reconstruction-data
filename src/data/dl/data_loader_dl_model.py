@@ -1,4 +1,4 @@
-from src.data_loader_base import DataLoaderBase
+from src.base.data_loader_base import DataLoaderBase
 
 
 class DataLoaderDLModel(DataLoaderBase):

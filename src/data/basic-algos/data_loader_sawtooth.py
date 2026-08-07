@@ -1,4 +1,4 @@
-from data.data_loader_rule_ml import DataLoaderRuleML
+from src.data import DataLoaderRuleML
 
 
 class DataLoaderSawtooth(DataLoaderRuleML):

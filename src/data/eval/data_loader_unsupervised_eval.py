@@ -1,4 +1,4 @@
-from data.data_loader_result import DataLoaderResult
+from src.data.eval.data_loader_result import DataLoaderResult
 
 
 class DataLoaderUnsupervisedEval(DataLoaderResult):

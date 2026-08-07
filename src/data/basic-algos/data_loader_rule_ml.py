@@ -1,6 +1,6 @@
 from abc import ABC
 
-from src.data_loader_base import DataLoaderBase
+from src.base.data_loader_base import DataLoaderBase
 
 
 class DataLoaderRuleML(DataLoaderBase, ABC):
