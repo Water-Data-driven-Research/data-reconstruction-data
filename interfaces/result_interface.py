@@ -7,4 +7,4 @@ from src.base_interface import BaseInterface
 
 @dataclass
 class ResultInterface(BaseInterface):
-    result: pd.DataFrame
+    pass
