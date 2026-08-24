@@ -1,0 +1,16 @@
+FROM python:3.10-slim
+
+WORKDIR /app
+
+RUN python -m pip install --upgrade pip
+
+# Install dependencies needed for tests
+RUN pip install pytest gdown
+
+# Copy project files into container root
+COPY . /app
+
+# Expose app directory to pythonpath
+ENV PYTHONPATH=/app
+
+ENTRYPOINT ["pytest", "src/tests/data_downloader_test.py"]
