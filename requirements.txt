@@ -1,2 +1,4 @@
 gdown==6.1.0
 pandas==2.1.1
+pytest==9.1.1
+requests==2.34.2
