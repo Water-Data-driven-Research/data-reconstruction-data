@@ -13,11 +13,11 @@ class DataDownloader:
         """
         Downloads the data, unzips it and deletes the original zip file
 
-        :param file_url: The Google Drive url of the file to be downloaded
-        :param file_name: The name of the file to be downloaded
+        :param str file_url: The Google Drive url of the file to be downloaded
+        :param str file_name: The name of the file to be downloaded
         """
 
-        self.data_folder = Path(__file__).resolve().parent / "downloaded"
+        self.data_folder = Path(__file__).resolve().parent.parent / "data"
         self.file_path = self.data_folder / file_name
         self.data_folder.mkdir(parents=True, exist_ok=True)
 
@@ -25,17 +25,18 @@ class DataDownloader:
 
         self.unzip()
 
-    def download(self, file_url: str) -> None:
+    def download(self, file_url: str):
         """
         Downloads the data from Google Drive
-        :param file_url: The Google Drive url of the file to be downloaded
+        :param str file_url: The Google Drive url of the file to be downloaded
         """
 
         if not self.file_path.is_file():
             gdown.download(url=file_url,
-                           output=str(self.file_path))
+                           output=str(self.file_path),
+                           quiet=False)
 
-    def unzip(self) -> None:
+    def unzip(self):
         """
         Unzips the downloaded zip file and deletes the original zip file
         """
