@@ -1,12 +1,13 @@
 name: Downloader Test
 
 on:
-  pull_request:
+  pull_request_review:
     branches:
       - main
 
 jobs:
-  test:
+  approved:
+    if: github.event.review.state == 'APPROVED'
     runs-on: ubuntu-latest
 
     steps:
