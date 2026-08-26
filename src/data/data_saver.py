@@ -15,11 +15,10 @@ class DataSaver:
         """
 
         corrected_file_name = file_name.removesuffix(".json") + ".csv"
+        full_path = os.path.join(file_path, corrected_file_name)
 
         # Ensure directory exists before saving
-        os.makedirs(os.path.dirname(file_path), exist_ok=True)
-
-        full_path = os.path.join(file_path, corrected_file_name)
+        os.makedirs(file_path, exist_ok=True)
 
         # Write DataFrame directly to disk
         df.to_csv(full_path, index=include_index)
