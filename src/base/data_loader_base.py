@@ -29,11 +29,11 @@ class DataLoaderBase(ABC):
                 start_time, end_time, d_nature, d_type, raw JSON data
         """
 
-        with open(file_path, 'r+') as file:
+        with open(file_path, "r+") as file:
             f_data = json.load(file)
 
         # Read the data type, station, start time and end time from the file name
-        name_pattern = r'(\S{2})_(\d{6})_(\d{4}-\d{2})_(\d{4}-\d{2})'
+        name_pattern = r"(\S{2})_(\d{6})_(\d{4}-\d{2})_(\d{4}-\d{2})"
         match = re.search(pattern=name_pattern, string=file_path)
 
         if match:
@@ -44,18 +44,20 @@ class DataLoaderBase(ABC):
                     end_time,
                     match.group(1)[0],
                     match.group(1)[1],
-                    self.transform_json_data(data=f_data[0]['TsItemList'])
+                    self.transform_json_data(data=f_data[0]["TsItemList"])
                     )
 
         else:
             raise ValueError("File name does not follow naming format")
 
     @staticmethod
-    def transform_json_data(data: dict) -> pd.DataFrame:
+    def transform_json_data(data: dict, do_multiply: bool = True) -> pd.DataFrame:
         """
-        This function corrects the read time series' time zone
+        This function corrects the read time series' time zone and unit of measurement
 
         :param dict data: the data to be transformed
+        :param bool do_multiply: True if data should be multiplied by 100 (to become centimeters)
+                                 False if data should be multiplied by 1 (to remain in meters)
 
         :return pd.DataFrame: the transformed data
         """
@@ -63,7 +65,9 @@ class DataLoaderBase(ABC):
         ts_list = data
         raw = pd.DataFrame(ts_list)
 
-        raw['UTCTime'] = pd.to_datetime(raw['UTCTime']).dt.tz_localize(None)
-        raw.set_index('UTCTime', inplace=True)
+        raw['Adat'] *= 100 if do_multiply else 1
+
+        raw["UTCTime"] = pd.to_datetime(raw["UTCTime"]).dt.tz_localize(None)
+        raw.set_index(keys="UTCTime", inplace=True)
 
         return raw
