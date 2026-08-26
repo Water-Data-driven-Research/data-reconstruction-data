@@ -6,6 +6,10 @@ import pandas as pd
 
 
 class DataLoaderBase(ABC):
+    """
+    Base class for all data loaders
+    """
+
     def __init__(self):
         pass
 
@@ -13,7 +17,6 @@ class DataLoaderBase(ABC):
     def load_data(self):
         """
         Abstract method, every class derived from DataDownloader must overwrite this function
-        :return None:
         """
 
         pass
@@ -21,6 +24,9 @@ class DataLoaderBase(ABC):
     def load_file(self, file_path: str) -> tuple[pd.Timestamp, pd.Timestamp, str, str, pd.DataFrame]:
         """
         Reads the data file and extracts the necessary information for data loading from the file name
+        time periods (d_nature): "test", train
+        types (d_type): registered, processed, detected (only main stations), discharge (only Makó)
+
         :param str file_path: Path of the file
         :return tuple[pd.Timestamp, pd.Timestamp, str, str, pd.DataFrame]:
                 start_time, end_time, d_nature, d_type, raw JSON data
@@ -48,15 +54,15 @@ class DataLoaderBase(ABC):
             raise ValueError("File name does not follow naming format")
 
     @staticmethod
-    def transform_json_data(data: dict, do_multiply: bool = True) -> pd.DataFrame:
+    def transform_json_data(data: list[dict], do_multiply: bool = True) -> pd.DataFrame:
         """
         This function corrects the read time series' time zone and unit of measurement
 
-        :param dict data: the data to be transformed
+        :param list[dict] data: the data to be transformed
         :param bool do_multiply: True if data should be multiplied by 100 (to become centimeters)
                                  False if data should be multiplied by 1 (to remain in meters)
 
-        :return pd.DataFrame: the transformed data
+        :return pd.DataFrame: The transformed data
         """
 
         ts_list = data
