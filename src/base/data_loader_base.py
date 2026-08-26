@@ -29,7 +29,7 @@ class DataLoaderBase(ABC):
                 start_time, end_time, d_nature, d_type, raw JSON data
         """
 
-        with open(file_path, "r+") as file:
+        with open(file_path, "r") as file:
             f_data = json.load(file)
 
         # Read the data type, station, start time and end time from the file name
