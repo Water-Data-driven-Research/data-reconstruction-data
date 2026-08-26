@@ -13,7 +13,7 @@ class DataLoaderBase(ABC):
         self.downloader = DataDownloader()
 
     @abstractmethod
-    def load_data(self) -> None:
+    def load_data(self):
         """
         Abstract method, every class derived from DataDownloader must overwrite this function
         :return None:
