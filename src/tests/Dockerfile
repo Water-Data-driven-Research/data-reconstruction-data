@@ -1,0 +1,18 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+RUN python -m pip install --upgrade pip
+
+# Install dependencies needed for tests
+RUN pip install pytest
+
+RUN pip install -r requirements.txt
+
+# Copy project files into container root
+COPY . /app
+
+# Expose app directory to pythonpath
+ENV PYTHONPATH=/app
+
+ENTRYPOINT ["pytest", "src/tests/base_data_loading_test.py"]

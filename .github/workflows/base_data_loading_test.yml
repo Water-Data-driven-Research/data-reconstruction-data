@@ -1,0 +1,23 @@
+name: Downloader Test
+
+on:
+  pull_request_review:
+    branches:
+      - main
+
+jobs:
+  approved:
+    if: github.event.review.state == 'APPROVED'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+          lfs: true
+
+      - name: Build Docker image
+        run: docker build . -t base-data-loading-test -f src/tests/Dockerfile_base_data_loading_test
+
+      - name: Run tests inside the container
+        run: docker run --rm base-data-loading-test
