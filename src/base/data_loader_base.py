@@ -4,12 +4,10 @@ import re
 
 import pandas as pd
 
-from src.data_downloader import DataDownloader
-
 
 class DataLoaderBase(ABC):
     def __init__(self):
-        self.downloader = DataDownloader()
+        pass
 
     @abstractmethod
     def load_data(self):
