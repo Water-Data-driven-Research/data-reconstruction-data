@@ -10,6 +10,7 @@ class DataDownloader:
     """
     Class for downloading time series related data
     """
+
     def __init__(self, file_url: str, file_name: str):
         """
         Downloads the data, unzips it and deletes the original zip file
@@ -40,6 +41,7 @@ class DataDownloader:
         """
         Unzips the downloaded zip file and deletes the original zip file
         """
+
         if self.file_path.suffix == ".zip" and self.file_path.is_file():
             with zipfile.ZipFile(self.file_path, "r") as zip_ref:
                 zip_ref.extractall(data_folder)
