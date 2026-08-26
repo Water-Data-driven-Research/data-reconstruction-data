@@ -1,8 +1,9 @@
 import gc
-from pathlib import Path
 import zipfile
 
 import gdown
+
+from src import data_folder
 
 
 class DataDownloader:
@@ -17,9 +18,8 @@ class DataDownloader:
         :param str file_name: The name of the file to be downloaded
         """
 
-        self.data_folder = Path(__file__).resolve().parent.parent / "data"
-        self.file_path = self.data_folder / file_name
-        self.data_folder.mkdir(parents=True, exist_ok=True)
+        self.file_path = data_folder / file_name
+        data_folder.mkdir(parents=True, exist_ok=True)
 
         self.download(file_url=file_url)
 
@@ -42,7 +42,7 @@ class DataDownloader:
         """
         if self.file_path.suffix == ".zip" and self.file_path.is_file():
             with zipfile.ZipFile(self.file_path, "r") as zip_ref:
-                zip_ref.extractall(self.data_folder)
+                zip_ref.extractall(data_folder)
 
             # Force Python to release open file handles left by gdown
             gc.collect()
