@@ -1,6 +1,3 @@
-from src.base.data_loader_base import DataLoaderBase
-
-
-class DataLoaderDLEval(DataLoaderBase):
+class DataLoaderDLEval:
     def __init__(self):
         super().__init__()
