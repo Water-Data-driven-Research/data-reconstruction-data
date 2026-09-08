@@ -9,10 +9,10 @@ class DataSaver:
     def __init__(self):
         pass
 
-    def save_csv(self, data: pd.DataFrame, file_name: str, include_index: bool = True):
+    def save_csv(self, data: pd.Series, file_name: str, include_index: bool = True):
         """Saves a pandas DataFrame to a CSV file on disk.
 
-        :param pd.DataFrame data: The transformed DataFrame to save
+        :param pd.Series data: The transformed Series to save
         :param str file_name: Destination file name
         :param bool include_index: Whether to write row names (index) into the CSV
         """
