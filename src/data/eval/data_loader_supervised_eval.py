@@ -1,6 +1,3 @@
-from src.base.data_loader_base import DataLoaderBase
-
-
-class DataLoaderSupervisedEval(DataLoaderBase):
+class DataLoaderSupervisedEval:
     def __init__(self):
         super().__init__()
