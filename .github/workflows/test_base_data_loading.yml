@@ -17,7 +17,7 @@ jobs:
           lfs: true
 
       - name: Build Docker image
-        run: docker build . -t base-data-loading-test -f src/tests/Dockerfile_base_data_loading_test
+        run: docker build . -t test-base-data-loading -f src/tests/Dockerfile_test_base_data_loading
 
       - name: Run tests inside the container
-        run: docker run --rm base-data-loading-test
+        run: docker run --rm test-base-data-loading

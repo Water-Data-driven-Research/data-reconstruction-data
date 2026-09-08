@@ -7,12 +7,12 @@ RUN python -m pip install --upgrade pip
 # Install dependencies needed for tests
 RUN pip install pytest
 
-RUN pip install -r requirements.txt
-
 # Copy project files into container root
 COPY . /app
+
+RUN pip install -r requirements.txt
 
 # Expose app directory to pythonpath
 ENV PYTHONPATH=/app
 
-ENTRYPOINT ["pytest", "src/tests/data_downloader_test.py"]
+ENTRYPOINT ["pytest", "src/tests/base_data_loading_test.py"]

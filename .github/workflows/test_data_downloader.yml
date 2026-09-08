@@ -17,7 +17,7 @@ jobs:
           lfs: true
 
       - name: Build Docker image
-        run: docker build . -t data-downloader-test -f src/tests/Dockerfile_data_downloader_test
+        run: docker build . -t test-data-downloader -f src/tests/Dockerfile_test_data_downloader
 
       - name: Run tests inside the container
-        run: docker run --rm data-downloader-test
+        run: docker run --rm test-data-downloader
