@@ -13,7 +13,7 @@ class DataSaver:
         """Saves a pandas DataFrame to a CSV file on disk.
 
         :param pd.Series data: The transformed Series to save
-        :param str file_name: Destination file name
+        :param str file_name: Name of the file to be saved (without extension)
         :param bool include_index: Whether to write row names (index) into the CSV
         """
 
@@ -27,14 +27,14 @@ class DataSaver:
         """
         Method for creating a folder for the given extension's download destination and for creating a full path
 
-        :param str file_name: Original name of the file (doesn't matter if the extension is included)
+        :param str file_name: Name of the file to be saved (without extension)
         :param str extension: The desired extension of the file e.g.: csv (without dot)
 
         :return Path full_path: The exact path of the saved file
                 that includes the given file name e.g.: data/csv/example.csv
         """
 
-        new_name = file_name.removesuffix(".json") + "." + extension
+        new_name = file_name + "." + extension
 
         dest_path = data_folder / extension
         dest_path.mkdir(parents=True, exist_ok=True)

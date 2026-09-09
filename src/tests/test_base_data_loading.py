@@ -172,7 +172,7 @@ def test_data_saver_save_csv(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
         name="Data",
     )
 
-    saver.save_csv(data=test_series, file_name="output_test.json", include_index=True)
+    saver.save_csv(data=test_series, file_name="output_test", include_index=True)
 
     expected_csv = tmp_path / "csv" / "output_test.csv"
     assert expected_csv.exists()
@@ -212,7 +212,7 @@ def test_full_data_loading_pipeline(tmp_path: Path, sample_gappy_json: list[dict
 
     # 4. Save
     saver = DataSaver()
-    saver.save_csv(data=processed_series, file_name=file_name)
+    saver.save_csv(data=processed_series, file_name=file_name.removesuffix(".json"))
 
     # 5. Assert output CSV state
     expected_path = tmp_path / "csv" / "rp_123456_2023-01_2023-02.csv"
