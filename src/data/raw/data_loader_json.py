@@ -15,6 +15,7 @@ class DataLoaderJson:
         self.d_nature = None
         self.d_type = None
         self.raw_data = None
+        self.file_name = None
 
     def load_file(self, file_path: str):
         """
@@ -42,6 +43,7 @@ class DataLoaderJson:
             self.d_nature = match.group(1)[0]
             self.d_type = match.group(1)[1]
             self.raw_data = self.transform_json_data(data=f_data[0]["TsItemList"])
+            self.file_name = file_path.split("/")[-1].removesuffix(".json")  # filename without extension
         else:
             raise ValueError("File name does not follow naming format")
 
