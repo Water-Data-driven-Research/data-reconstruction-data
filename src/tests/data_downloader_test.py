@@ -4,6 +4,7 @@ import shutil
 import pytest
 
 from src.data_downloader import DataDownloader
+from src import data_folder
 
 
 @pytest.fixture(scope="module")
@@ -18,7 +19,6 @@ def download_context():
     downloader = DataDownloader(file_url=test_url, file_name=file_name)
 
     context = {
-        "data_folder": downloader.data_folder,  # Path: the path of the downloaded folder
         "test_url": test_url,  # str: the url of the zip file downloaded
         "file_name": file_name,  # str: name of the zip file downloaded
     }
@@ -26,8 +26,8 @@ def download_context():
     yield context
 
     # Delete the extracted data after all tests run
-    if downloader.data_folder.exists():
-        shutil.rmtree(downloader.data_folder)
+    if data_folder.exists():
+        shutil.rmtree(data_folder)
 
 
 def test_download_directory_exists(download_context: dict):
@@ -36,8 +36,6 @@ def test_download_directory_exists(download_context: dict):
 
     :param dict download_context: data related to the download
     """
-
-    data_folder = download_context["data_folder"]
 
     assert data_folder.exists(), "The downloaded folder does not exist."
     assert data_folder.is_dir(), "The downloaded path is not a directory."
@@ -59,8 +57,6 @@ def test_expected_subdirectories_exist(download_context: dict):
         "reconstructed_data",
     ]
 
-    data_folder = download_context["data_folder"]
-
     for folder_name in expected_folders:
         folder_path = data_folder / folder_name
         assert folder_path.exists(), f"Missing subfolder: {folder_name}"
@@ -73,8 +69,6 @@ def test_specific_files_exist(download_context: dict):
 
     :param dict download_context: data related to the download
     """
-
-    data_folder = download_context["data_folder"]
 
     expected_files = [
         # csv_data structure
@@ -98,7 +92,6 @@ def test_zip_file_deleted(download_context: dict):
     :param dict download_context: data related to the download
     """
 
-    data_folder = download_context["data_folder"]
     file_name = download_context["file_name"]
 
     zip_path = data_folder / file_name
