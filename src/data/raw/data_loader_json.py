@@ -24,7 +24,7 @@ class DataLoaderJson:
         - end time (pd.Timestamp)
         - time periods (d_nature): test, train (str)
         - types (d_type): registered, processed, detected (only main stations), discharge (only Makó) (str)
-        Saves all this data as class varables alongside the data itself. The data is saved as a pd.Series and some
+        Saves all this data as class variables alongside the data itself. The data is saved as a pd.Series and some
         transformations are made to it before saving.
 
         :param str file_path: Path of the file
