@@ -82,7 +82,7 @@ def test_load_file_success(tmp_path: Path, sample_gappy_json: list[dict]):
 
     assert loader.start_time == pd.to_datetime("2023-01")
     assert loader.end_time == pd.to_datetime("2023-02")
-    assert loader.d_nature == "r"
+    assert loader.d_train_type == "r"
     assert loader.d_type == "p"
     assert isinstance(loader.raw_data, pd.Series)
 
