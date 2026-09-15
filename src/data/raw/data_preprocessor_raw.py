@@ -9,7 +9,10 @@ class DataPreprocessorRaw:
 
     @staticmethod
     def r_p_fill(
-            start_time: pd.Timestamp, end_time: pd.Timestamp, data: pd.Series, t_delta: datetime.timedelta
+            start_time: pd.Timestamp,
+            end_time: pd.Timestamp,
+            data: pd.Series,
+            t_delta: datetime.timedelta
             ) -> pd.Series:
         """
         Fill registered and processed time series
@@ -30,7 +33,10 @@ class DataPreprocessorRaw:
 
     @staticmethod
     def de_fill(
-            start_time: pd.Timestamp, end_time: pd.Timestamp, data: pd.Series, t_delta: datetime.timedelta
+            start_time: pd.Timestamp,
+            end_time: pd.Timestamp,
+            data: pd.Series,
+            t_delta: datetime.timedelta
             ) -> pd.Series:
         """
         Fill detected time series
@@ -55,7 +61,10 @@ class DataPreprocessorRaw:
 
     @staticmethod
     def di_fill(
-            start_time: pd.Timestamp, end_time: pd.Timestamp, data: pd.Series, t_delta: datetime.timedelta
+            start_time: pd.Timestamp,
+            end_time: pd.Timestamp,
+            data: pd.Series,
+            t_delta: datetime.timedelta
             ) -> pd.Series:
         """
         Fill discharge time series
@@ -72,4 +81,3 @@ class DataPreprocessorRaw:
         dummy_data = pd.DataFrame(index=index)
         dummy_data['Data'] = data / 100
         return dummy_data['Data'].interpolate().drop(dummy_data.index[:4]).fillna(0)
-    
