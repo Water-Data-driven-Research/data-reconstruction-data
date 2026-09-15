@@ -39,6 +39,6 @@ class DataSaver:
         dest_path = data_folder / extension
         dest_path.mkdir(parents=True, exist_ok=True)
 
-        full_path = data_folder / extension / new_name
+        full_path = dest_path / new_name
 
         return full_path
