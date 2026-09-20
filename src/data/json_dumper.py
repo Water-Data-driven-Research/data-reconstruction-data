@@ -10,7 +10,7 @@ class JsonDumper:
 
         :param pd.DataFrame | pd.Series data: data to be dumped
         :param str file_name: name of the output file
-        :param Path file_path: path of the ouptut file
+        :param Path file_path: path of the output file
         """
 
         file_path.mkdir(parents=True, exist_ok=True)
