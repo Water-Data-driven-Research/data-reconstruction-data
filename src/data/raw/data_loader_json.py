@@ -12,7 +12,7 @@ class DataLoaderJson:
     def __init__(self):
         self.start_time = None
         self.end_time = None
-        self.d_nature = None
+        self.d_train_type = None
         self.d_type = None
         self.raw_data = None
         self.file_name = None
@@ -22,7 +22,7 @@ class DataLoaderJson:
         Reads the data file and extracts the necessary information for data loading from the file name which are:
         - start time (pd.Timestamp)
         - end time (pd.Timestamp)
-        - time periods (d_nature): test, train (str)
+        - time periods (d_train_type): test, train (str)
         - types (d_type): registered, processed, detected (only main stations), discharge (only Makó) (str)
         Saves all this data as class variables alongside the data itself. The data is saved as a pd.Series and some
         transformations are made to it before saving.
@@ -40,7 +40,7 @@ class DataLoaderJson:
         if match:
             self.start_time = pd.to_datetime(match.group(3))
             self.end_time = pd.to_datetime(match.group(4))
-            self.d_nature = match.group(1)[0]
+            self.d_train_type = match.group(1)[0]
             self.d_type = match.group(1)[1]
             self.raw_data = self.transform_json_data(data=f_data[0]["TsItemList"])
             self.file_name = file_path.split("/")[-1].removesuffix(".json")  # filename without extension
