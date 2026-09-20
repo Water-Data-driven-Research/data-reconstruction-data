@@ -41,11 +41,32 @@ class DataLoaderJson:
             self.start_time = pd.to_datetime(match.group(3))
             self.end_time = pd.to_datetime(match.group(4))
             self.d_train_type = match.group(1)[0]
-            self.d_type = match.group(1)[1]
+            self.d_type = DataLoaderJson.translate_d_type(original_d_type=match.group(1)[1])
             self.raw_data = self.transform_json_data(data=f_data[0]["TsItemList"])
             self.file_name = file_path.split("/")[-1].removesuffix(".json")  # filename without extension
         else:
             raise ValueError("File name does not follow naming format")
+
+    @staticmethod
+    def translate_d_type(original_d_type: str) -> str:
+        """
+
+        :param str original_d_type: the original d_type which is a single letter
+               (the first letter of the Hungarian word for that d_type)
+
+        :return str translated_d_type: the translated d_type (full English word)
+        """
+
+        if original_d_type == "r":
+            return "registered"
+        elif original_d_type == "f":
+            return "processed"
+        elif original_d_type == "e":
+            return "detected"
+        elif original_d_type == "v":
+            return "discharge"
+        else:
+            raise ValueError("Unrecognized d_type")
 
     @staticmethod
     def transform_json_data(data: list[dict], do_conversion: bool = True) -> pd.Series:
