@@ -23,9 +23,10 @@ class DataLoaderJson:
 
     def run(self, file_path: str, t_delta: datetime.timedelta):
         """
+        Loads the specified time series, then fills them with the appropriate fill function from DataPreprocessorRaw
 
-        :param str file_path:
-        :param datetime.timedelta t_delta:
+        :param str file_path: Path of the time series to be loaded
+        :param datetime.timedelta t_delta: Time (in minutes) between data points in the time series (usually 15)
         """
 
         self.load_file(file_path=file_path)
@@ -81,6 +82,7 @@ class DataLoaderJson:
     @staticmethod
     def translate_d_type(original_d_type: str) -> str:
         """
+        Translates the single letter d_type to a full English word
 
         :param str original_d_type: the original d_type which is a single letter
                (the first letter of the Hungarian word for that d_type)
