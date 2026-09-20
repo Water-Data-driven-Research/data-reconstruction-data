@@ -6,10 +6,8 @@ from src import data_folder
 
 
 class DataSaver:
-    def __init__(self):
-        pass
-
-    def save_csv(self, data: pd.Series, file_name: str, include_index: bool = True):
+    @staticmethod
+    def save_csv(data: pd.Series, file_name: str, include_index: bool = True):
         """Saves a pandas DataFrame to a CSV file on disk.
 
         :param pd.Series data: The transformed Series to save
@@ -17,7 +15,7 @@ class DataSaver:
         :param bool include_index: Whether to write row names (index) into the CSV
         """
 
-        full_path = self.make_folder(file_name=file_name, extension="csv")
+        full_path = DataSaver.make_folder(file_name=file_name, extension="csv")
 
         # Convert Series to DataFrame and write it to disk
         pd.DataFrame(data).to_csv(full_path, index=include_index)
