@@ -1,7 +1,10 @@
 import json
 import re
 
+import datetime
 import pandas as pd
+
+from src.data.raw.data_preprocessor_raw import DataPreprocessorRaw
 
 
 class DataLoaderJson:
@@ -15,8 +18,36 @@ class DataLoaderJson:
         self.d_train_type = None
         self.d_type = None
         self.raw_data = None
+        self.filled_data = None
         self.file_name = None
 
+    def run(self, file_path: str, t_delta: datetime.timedelta):
+        """
+
+        :param str file_path:
+        :param datetime.timedelta t_delta:
+        """
+
+        self.load_file(file_path=file_path)
+
+        if self.d_type == "registered" or self.d_type == "processed":
+            self.filled_data = DataPreprocessorRaw.r_p_fill(start_time=self.start_time,
+                                                            end_time=self.end_time,
+                                                            data=self.raw_data,
+                                                            t_delta=t_delta)
+        elif self.d_type == "detected":
+            self.filled_data = DataPreprocessorRaw.de_fill(start_time=self.start_time,
+                                                           end_time=self.end_time,
+                                                           data=self.raw_data,
+                                                           t_delta=t_delta)
+        elif self.d_type == "discharge":
+            self.filled_data = DataPreprocessorRaw.di_fill(start_time=self.start_time,
+                                                           end_time=self.end_time,
+                                                           data=self.raw_data,
+                                                           t_delta=t_delta)
+        else:
+            raise ValueError("Unrecognized d_type")
+        
     def load_file(self, file_path: str):
         """
         Reads the data file and extracts the necessary information for data loading from the file name which are:
