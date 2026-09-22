@@ -1,4 +1,5 @@
 import datetime
+
 import pandas as pd
 
 
@@ -50,14 +51,17 @@ class DataPreprocessorRaw:
         
         index = pd.date_range(start=start_time, end=end_time, freq=datetime.timedelta(minutes=1))
         afternoon_values = data.between_time(start_time='8:10', end_time='3:50').index
-        dummy_data = pd.DataFrame(index=index, columns=["Data"], data=data.drop(afternoon_values))
+        dummy_data = pd.DataFrame(index=index, columns=["Data"],
+                                  data=data.drop(afternoon_values))
 
         dummy_data['Data'] = dummy_data['Data'].interpolate(method='polynomial',
                                                             order=3).asfreq(t_delta)
 
         condition = dummy_data.index.minute % (t_delta.total_seconds() / 60) == 0
 
-        return dummy_data['Data'][condition].drop(dummy_data[condition].index[:4]).fillna(0)
+        return dummy_data['Data'][condition].drop(
+            dummy_data[condition].index[:4]
+        ).fillna(0)
 
     @staticmethod
     def di_fill(
@@ -80,4 +84,6 @@ class DataPreprocessorRaw:
         index = pd.date_range(start=start_time, end=end_time, freq=t_delta)
         dummy_data = pd.DataFrame(index=index, columns=["Data"], data=data / 100)
 
-        return dummy_data['Data'].interpolate().drop(dummy_data.index[:4]).fillna(0)
+        return dummy_data['Data'].interpolate()\
+                                 .drop(dummy_data.index[:4])\
+                                 .fillna(0)
