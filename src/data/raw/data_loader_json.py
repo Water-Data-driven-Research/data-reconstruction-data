@@ -32,74 +32,18 @@ class DataLoaderJson:
         self.load_file(file_path=file_path)
 
         if self.d_type == "registered" or self.d_type == "processed":
-            self.filled_data = DataPreprocessorRaw.r_p_fill(start_time=self.start_time,
-                                                            end_time=self.end_time,
-                                                            data=self.raw_data,
-                                                            t_delta=t_delta)
+            func = DataPreprocessorRaw.r_p_fill
         elif self.d_type == "detected":
-            self.filled_data = DataPreprocessorRaw.de_fill(start_time=self.start_time,
-                                                           end_time=self.end_time,
-                                                           data=self.raw_data,
-                                                           t_delta=t_delta)
+            func = DataPreprocessorRaw.de_fill
         elif self.d_type == "discharge":
-            self.filled_data = DataPreprocessorRaw.di_fill(start_time=self.start_time,
-                                                           end_time=self.end_time,
-                                                           data=self.raw_data,
-                                                           t_delta=t_delta)
+            func = DataPreprocessorRaw.di_fill
         else:
             raise ValueError("Unrecognized d_type")
-        
-    def load_file(self, file_path: str):
-        """
-        Reads the data file and extracts the necessary information for data loading from the file name which are:
-        - start time (pd.Timestamp)
-        - end time (pd.Timestamp)
-        - time periods (d_train_type): test, train (str)
-        - types (d_type): registered, processed, detected (only main stations), discharge (only Makó) (str)
-        Saves all this data as class variables alongside the data itself. The data is saved as a pd.Series and some
-        transformations are made to it before saving.
 
-        :param str file_path: Path of the file
-        """
-
-        with open(file_path, "r") as file:
-            f_data = json.load(file)
-
-        # Read the data type, station, start time and end time from the file name
-        name_pattern = r"(\S{2})_(\d{6})_(\d{4}-\d{2})_(\d{4}-\d{2})"
-        match = re.search(pattern=name_pattern, string=file_path)
-
-        if match:
-            self.start_time = pd.to_datetime(match.group(3))
-            self.end_time = pd.to_datetime(match.group(4))
-            self.d_train_type = match.group(1)[0]
-            self.d_type = DataLoaderJson.translate_d_type(original_d_type=match.group(1)[1])
-            self.raw_data = self.transform_json_data(data=f_data[0]["TsItemList"])
-            self.file_name = file_path.split("/")[-1].removesuffix(".json")  # filename without extension
-        else:
-            raise ValueError("File name does not follow naming format")
-
-    @staticmethod
-    def translate_d_type(original_d_type: str) -> str:
-        """
-        Translates the single letter d_type to a full English word
-
-        :param str original_d_type: the original d_type which is a single letter
-               (the first letter of the Hungarian word for that d_type)
-
-        :return str translated_d_type: the translated d_type (full English word)
-        """
-
-        if original_d_type == "r":
-            return "registered"
-        elif original_d_type == "f":
-            return "processed"
-        elif original_d_type == "e":
-            return "detected"
-        elif original_d_type == "v":
-            return "discharge"
-        else:
-            raise ValueError("Unrecognized d_type")
+        func(start_time=self.start_time,
+             end_time=self.end_time,
+             data=self.raw_data,
+             t_delta=t_delta)
 
     @staticmethod
     def transform_json_data(data: list[dict], do_conversion: bool = True) -> pd.Series:
@@ -126,7 +70,7 @@ class DataLoaderJson:
         # Rename key "Adat" to "Data"
         raw.rename(columns={"Adat": "Data"}, inplace=True)
 
-        # Do unit conversion if do_multiply is True (m -> cm)
+        # Do unit conversion if do_conversion is True (m -> cm)
         if do_conversion:
             raw['Data'] *= 100
 
