@@ -32,7 +32,6 @@ class DataLoaderJson:
 
         self.filled_data = None
 
-
     def load_file(self, file_path: Path):
         """
         Reads the data file and extracts the necessary information for data loading from the file name which are:
