@@ -19,6 +19,10 @@ class DataLoaderJson:
         self.d_train_type = None
         self.d_type = None
         self.raw_data = None
+        self.file_name = None
+
+        self.load_file(file_path=file_path)
+
         self.filled_data = None
 
         self.d_type_translator = {
