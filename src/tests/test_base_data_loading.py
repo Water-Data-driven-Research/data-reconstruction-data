@@ -54,7 +54,7 @@ def test_transform_json_data_creates_series_with_holes(sample_gappy_json: list[d
     assert len(series_cm) == 8  # 00:00 to 01:45 at 15min intervals
     assert series_cm.loc["2023-01-01 00:00:00"] == 100.0
     assert series_cm.loc["2023-01-01 01:00:00"] == 200.0
-    assert pd.isna(series_cm.loc["2023-01-01 01:15:00"])  # Hole verified
+    assert pd.isna(obj=series_cm.loc["2023-01-01 01:15:00"])  # Hole verified
 
     # Test without unit conversion
     series_m = DataLoaderJson.transform_json_data(data=ts_data, do_conversion=False)
@@ -69,20 +69,19 @@ def test_load_file_success(tmp_path: Path, sample_gappy_json: list[dict]):
     :param Path tmp_path: Pytest temporary directory fixture.
     :param list[dict] sample_gappy_json: Pytest fixture containing gappy mock JSON data.
     """
-    loader = DataLoaderJson()
 
     # Pattern: (\S{2})_(\d{6})_(\d{4}-\d{2})_(\d{4}-\d{2})
     file_name = "rp_123456_2023-01_2023-02.json"
     file_path = tmp_path / file_name
 
     with open(file_path, "w") as f:
-        json.dump(sample_gappy_json, f)
+        json.dump(obj=sample_gappy_json, fp=f)
 
-    loader.load_file(str(file_path))
+    loader = DataLoaderJson(file_path=file_path)
 
-    assert loader.start_time == pd.to_datetime("2023-01")
-    assert loader.end_time == pd.to_datetime("2023-02")
-    assert loader.d_nature == "r"
+    assert loader.start_time == pd.to_datetime(arg="2023-01")
+    assert loader.end_time == pd.to_datetime(arg="2023-02")
+    assert loader.d_train_type == "r"
     assert loader.d_type == "p"
     assert isinstance(loader.raw_data, pd.Series)
 
@@ -94,14 +93,13 @@ def test_load_file_invalid_name(tmp_path: Path, sample_gappy_json: list[dict]):
     :param Path tmp_path: Pytest temporary directory fixture.
     :param list[dict] sample_gappy_json: Pytest fixture containing gappy mock JSON data.
     """
-    loader = DataLoaderJson()
     invalid_path = tmp_path / "invalid_filename.json"
 
     with open(invalid_path, "w") as f:
-        json.dump(sample_gappy_json, f)
+        json.dump(obj=sample_gappy_json, fp=f)
 
     with pytest.raises(ValueError, match="File name does not follow naming format"):
-        loader.load_file(str(invalid_path))
+        loader = DataLoaderJson(file_path=invalid_path)
 
 
 # ==============================================================================
@@ -122,7 +120,10 @@ def test_preprocessor_r_p_fill_interpolates_holes(sample_gappy_json: list[dict])
     end_time = raw_series.index.max()
     t_delta = datetime.timedelta(minutes=15)
 
-    filled_series = DataPreprocessorRaw.r_p_fill(start_time, end_time, raw_series, t_delta)
+    filled_series = DataPreprocessorRaw.r_p_fill(start_time=start_time,
+                                                 end_time=end_time,
+                                                 data=raw_series,
+                                                 t_delta=t_delta)
 
     assert isinstance(filled_series, pd.Series)
     assert not filled_series.isna().any()  # Asserts all holes are filled
@@ -144,10 +145,14 @@ def test_preprocessor_di_fill_scales_and_fills(sample_gappy_json: list[dict]):
     end_time = raw_series.index.max()
     t_delta = datetime.timedelta(minutes=15)
 
-    filled_series = DataPreprocessorRaw.di_fill(start_time, end_time, raw_series, t_delta)
+    filled_series = DataPreprocessorRaw.di_fill(start_time=start_time,
+                                                end_time=end_time,
+                                                data=raw_series,
+                                                t_delta=t_delta)
 
     assert isinstance(filled_series, pd.Series)
     assert not filled_series.isna().any()
+
     # Interpolated value (300.0) scaled down by 100 should be 3.0
     assert filled_series.loc["2023-01-01 01:15:00"] == 3.0
 
@@ -163,12 +168,12 @@ def test_data_saver_save_csv(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     :param Path tmp_path: Pytest temporary directory fixture.
     :param pytest.MonkeyPatch monkeypatch: Pytest fixture to temporarily override data_folder.
     """
-    monkeypatch.setattr("src.data.data_saver.data_folder", tmp_path)
+    monkeypatch.setattr(target="src.data.data_saver.data_folder", name=tmp_path)
 
     saver = DataSaver()
     test_series = pd.Series(
-        [100.0, 200.0],
-        index=pd.date_range("2023-01-01", periods=2, freq="15min"),
+        data=[100.0, 200.0],
+        index=pd.date_range(start="2023-01-01", periods=2, freq="15min"),
         name="Data",
     )
 
@@ -177,7 +182,7 @@ def test_data_saver_save_csv(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     expected_csv = tmp_path / "csv" / "output_test.csv"
     assert expected_csv.exists()
 
-    saved_data = pd.read_csv(expected_csv)
+    saved_data = pd.read_csv(filepath_or_buffer=expected_csv)
     assert "Data" in saved_data.columns
 
 
@@ -190,17 +195,16 @@ def test_full_data_loading_pipeline(tmp_path: Path, sample_gappy_json: list[dict
     :param list[dict] sample_gappy_json: Pytest fixture containing gappy mock JSON data.
     :param pytest.MonkeyPatch monkeypatch: Pytest fixture to temporarily override data_folder.
     """
-    monkeypatch.setattr("src.data.data_saver.data_folder", tmp_path)
+    monkeypatch.setattr(target="src.data.data_saver.data_folder", name=tmp_path)
 
     # 1. Setup raw JSON file
     file_name = "rp_123456_2023-01_2023-02.json"
     file_path = tmp_path / file_name
-    with open(file_path, "w") as f:
-        json.dump(sample_gappy_json, f)
+    with open(file=file_path, mode="w") as f:
+        json.dump(obj=sample_gappy_json, fp=f)
 
     # 2. Load
-    loader = DataLoaderJson()
-    loader.load_file(str(file_path))
+    loader = DataLoaderJson(file_path=file_path)
 
     # 3. Preprocess holes
     processed_series = DataPreprocessorRaw.r_p_fill(
@@ -218,5 +222,5 @@ def test_full_data_loading_pipeline(tmp_path: Path, sample_gappy_json: list[dict
     expected_path = tmp_path / "csv" / "rp_123456_2023-01_2023-02.csv"
     assert expected_path.exists()
 
-    final_df = pd.read_csv(expected_path)
+    final_df = pd.read_csv(filepath_or_buffer=expected_path)
     assert not final_df.isna().any().any()
