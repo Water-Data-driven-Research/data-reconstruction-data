@@ -21,16 +21,17 @@ class DataLoaderJson:
         self.raw_data = None
         self.file_name = None
 
-        self.load_file(file_path=file_path)
-
-        self.filled_data = None
-
         self.d_type_translator = {
             "r": "registered",
             "f": "processed",
             "e": "detected",
             "v": "discharge"
         }
+
+        self.load_file(file_path=file_path)
+
+        self.filled_data = None
+
 
     def load_file(self, file_path: Path):
         """
