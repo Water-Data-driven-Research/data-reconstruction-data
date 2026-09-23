@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 import re
 
 import datetime
@@ -12,20 +13,57 @@ class DataLoaderJson:
     Base class for all data loaders
     """
 
-    def __init__(self):
+    def __init__(self, file_path: Path):
         self.start_time = None
         self.end_time = None
         self.d_train_type = None
         self.d_type = None
         self.raw_data = None
         self.filled_data = None
-        self.file_name = None
 
-    def run(self, file_path: str, t_delta: datetime.timedelta):
+        self.d_type_translator = {
+            "r": "registered",
+            "f": "processed",
+            "e": "detected",
+            "v": "discharge"
+        }
+
+    def load_file(self, file_path: Path):
+        """
+        Reads the data file and extracts the necessary information for data loading from the file name which are:
+        - start time (pd.Timestamp)
+        - end time (pd.Timestamp)
+        - time periods (d_train_type): test, train (str)
+        - types (d_type): registered, processed, detected (only main stations), discharge (only Makó) (str)
+        Saves all this data as class variables alongside the data itself. The data is saved as a pd.Series and some
+        transformations are made to it before saving.
+
+        :param Path file_path: Path of the file
+        """
+
+        with open(file_path, "r") as file:
+            f_data = json.load(file)
+
+        self.file_name = file_path.name.removesuffix(".json")  # file name without extension
+
+        # Read the data type, station, start time and end time from the file name
+        name_pattern = r"(\S{2})_(\d{6})_(\d{4}-\d{2})_(\d{4}-\d{2})"
+        match = re.search(pattern=name_pattern, string=self.file_name)
+
+        if match:
+            self.start_time = pd.to_datetime(match.group(3))
+            self.end_time = pd.to_datetime(match.group(4))
+            self.d_train_type = match.group(1)[0]
+            self.d_type = self.d_type_translator[match.group(1)[1]]
+            self.raw_data = self.transform_json_data(data=f_data[0]["TsItemList"])
+        else:
+            raise ValueError("File name does not follow naming format")
+
+    def run(self, file_path: Path, t_delta: datetime.timedelta):
         """
         Loads the specified time series, then fills them with the appropriate fill function from DataPreprocessorRaw
 
-        :param str file_path: Path of the time series to be loaded
+        :param Path file_path: Path of the time series to be loaded
         :param datetime.timedelta t_delta: Time (in minutes) between data points in the time series (usually 15)
         """
 
