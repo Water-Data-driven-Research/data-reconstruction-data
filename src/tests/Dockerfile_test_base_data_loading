@@ -15,4 +15,4 @@ RUN pip install -r requirements.txt
 # Expose app directory to pythonpath
 ENV PYTHONPATH=/app
 
-ENTRYPOINT ["pytest", "src/tests/test_data_downloader.py"]
+ENTRYPOINT ["pytest", "src/tests/test_base_data_loading.py"]

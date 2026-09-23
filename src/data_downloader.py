@@ -19,8 +19,10 @@ class DataDownloader:
         :param str file_name: The name of the file to be downloaded
         """
 
-        self.file_path = data_folder / file_name
-        data_folder.mkdir(parents=True, exist_ok=True)
+        self.dest_path = data_folder / "json"  # pointing to the folder the zip file will be extracted in
+
+        self.file_path = self.dest_path / file_name  # pointing to the downloaded zip file itself
+        self.dest_path.mkdir(parents=True, exist_ok=True)
 
         self.download(file_url=file_url)
 
@@ -44,7 +46,7 @@ class DataDownloader:
 
         if self.file_path.suffix == ".zip" and self.file_path.is_file():
             with zipfile.ZipFile(self.file_path, "r") as zip_ref:
-                zip_ref.extractall(data_folder)
+                zip_ref.extractall(self.dest_path)
 
             # Force Python to release open file handles left by gdown
             gc.collect()
