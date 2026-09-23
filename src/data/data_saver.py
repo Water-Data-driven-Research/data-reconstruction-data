@@ -6,21 +6,20 @@ from src import data_folder
 
 
 class DataSaver:
-    def __init__(self):
-        pass
-
-    def save_csv(self, data: pd.Series, file_name: str, include_index: bool = True):
-        """Saves a pandas DataFrame to a CSV file on disk.
+    @staticmethod
+    def save_csv(data: pd.Series, file_name: str, include_index: bool = True):
+        """
+        Saves a pandas DataFrame to a CSV file on disk.
 
         :param pd.Series data: The transformed Series to save
         :param str file_name: Name of the file to be saved (without extension)
         :param bool include_index: Whether to write row names (index) into the CSV
         """
 
-        full_path = self.make_folder(file_name=file_name, extension="csv")
+        full_path = DataSaver.make_folder(file_name=file_name, extension="csv")
 
         # Convert Series to DataFrame and write it to disk
-        pd.DataFrame(data).to_csv(full_path, index=include_index)
+        pd.DataFrame(data).to_csv(path_or_buf=full_path, index=include_index)
 
     @staticmethod
     def make_folder(file_name: str, extension: str) -> Path:
@@ -34,11 +33,10 @@ class DataSaver:
                 that includes the given file name e.g.: data/csv/example.csv
         """
 
-        new_name = file_name + "." + extension
-
         dest_path = data_folder / extension
         dest_path.mkdir(parents=True, exist_ok=True)
 
+        new_name = file_name + "." + extension
         full_path = dest_path / new_name
 
         return full_path
