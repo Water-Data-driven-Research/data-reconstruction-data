@@ -2,19 +2,18 @@ import json
 from pathlib import Path
 import pandas as pd
 import pytest
-from pathlib import Path
 
 from src.data.json_dumper import JsonDumper
 
 
 @pytest.fixture
 def sample_df():
-    return pd.DataFrame({"id": [1, 2], "name": ["Alice", "Bob"]})
+    return pd.DataFrame({"value": ["t", "registered"], "metadata": ["d_train_type", "d_type"]})
 
 
 @pytest.fixture
 def sample_series():
-    return pd.Series([10, 20, 30], name="numbers")
+    return pd.Series(data=[74.5, 75, 75.5], name="Data")
 
 
 def test_dump_json_dataframe(tmp_path: Path, sample_df: pd.DataFrame):
@@ -40,8 +39,8 @@ def test_dump_json_dataframe(tmp_path: Path, sample_df: pd.DataFrame):
         data = json.load(f)
 
     expected_data = [
-        {"id": 1, "name": "Alice"},
-        {"id": 2, "name": "Bob"}
+        {"value": "t", "metadata": "d_train_type"},
+        {"value": "registered", "metadata": "d_type"}
     ]
     assert data == expected_data
 
@@ -65,7 +64,7 @@ def test_dump_json_series(tmp_path: Path, sample_series: pd.Series):
     with open(expected_file, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    assert data == [10, 20, 30]
+    assert data == [74.5, 75, 75.5]
 
 
 def test_dump_json_creates_nonexistent_directory(tmp_path: Path, sample_df: pd.DataFrame):
