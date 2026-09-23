@@ -71,7 +71,7 @@ def test_load_file_success(tmp_path: Path, sample_gappy_json: list[dict]):
     """
 
     # Pattern: (\S{2})_(\d{6})_(\d{4}-\d{2})_(\d{4}-\d{2})
-    file_name = "rp_123456_2023-01_2023-02.json"
+    file_name = "tr_123456_2023-01_2023-02.json"
     file_path = tmp_path / file_name
 
     with open(file_path, "w") as f:
@@ -81,8 +81,8 @@ def test_load_file_success(tmp_path: Path, sample_gappy_json: list[dict]):
 
     assert loader.start_time == pd.to_datetime(arg="2023-01")
     assert loader.end_time == pd.to_datetime(arg="2023-02")
-    assert loader.d_train_type == "r"
-    assert loader.d_type == "p"
+    assert loader.d_train_type == "t"
+    assert loader.d_type == "registered"
     assert isinstance(loader.raw_data, pd.Series)
 
 
@@ -198,7 +198,7 @@ def test_full_data_loading_pipeline(tmp_path: Path, sample_gappy_json: list[dict
     monkeypatch.setattr(target="src.data.data_saver.data_folder", name=tmp_path)
 
     # 1. Setup raw JSON file
-    file_name = "rp_123456_2023-01_2023-02.json"
+    file_name = "tr_123456_2023-01_2023-02.json"
     file_path = tmp_path / file_name
     with open(file=file_path, mode="w") as f:
         json.dump(obj=sample_gappy_json, fp=f)
@@ -219,7 +219,7 @@ def test_full_data_loading_pipeline(tmp_path: Path, sample_gappy_json: list[dict
     saver.save_csv(data=processed_series, file_name=file_name.removesuffix(".json"))
 
     # 5. Assert output CSV state
-    expected_path = tmp_path / "csv" / "rp_123456_2023-01_2023-02.csv"
+    expected_path = tmp_path / "csv" / "tr_123456_2023-01_2023-02.csv"
     assert expected_path.exists()
 
     final_df = pd.read_csv(filepath_or_buffer=expected_path)
