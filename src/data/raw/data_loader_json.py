@@ -14,14 +14,14 @@ class DataLoaderJson:
     """
 
     def __init__(self, file_path: Path):
-        self.start_time = None
-        self.end_time = None
-        self.d_train_type = None
-        self.d_type = None
-        self.raw_data = None
-        self.file_name = None
+        self.start_time: pd.Timestamp = pd.NaT
+        self.end_time: pd.Timestamp = pd.NaT
+        self.d_train_type: str = ""
+        self.d_type: str = ""
+        self.raw_data: pd.Series = pd.Series()
+        self.file_name: str = ""
 
-        self.d_type_translator = {
+        self.d_type_translator: dict[str, str] = {
             "r": "registered",
             "f": "processed",
             "e": "detected",
@@ -30,7 +30,7 @@ class DataLoaderJson:
 
         self.load_file(file_path=file_path)
 
-        self.filled_data = None
+        self.filled_data: pd.Series = pd.Series()
 
     def load_file(self, file_path: Path):
         """
@@ -71,8 +71,6 @@ class DataLoaderJson:
         :param datetime.timedelta t_delta: Time (in minutes) between data points in the time series (usually 15)
         """
 
-        self.load_file(file_path=file_path)
-
         if self.d_type == "registered" or self.d_type == "processed":
             func = DataPreprocessorRaw.r_p_fill
         elif self.d_type == "detected":
@@ -107,7 +105,7 @@ class DataLoaderJson:
         """
 
         ts_list = data
-        raw = pd.DataFrame(ts_list)
+        raw = pd.DataFrame(data=ts_list)
 
         # Rename key "Adat" to "Data"
         raw.rename(columns={"Adat": "Data"}, inplace=True)
