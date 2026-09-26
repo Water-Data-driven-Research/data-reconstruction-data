@@ -1,4 +1,4 @@
-name: Downloader Test
+name: Base Data Loading Test
 
 on:
   pull_request_review:
