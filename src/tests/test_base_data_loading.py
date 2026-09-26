@@ -37,7 +37,6 @@ def sample_gappy_json() -> list[dict]:
 # ==============================================================================
 # DataLoaderJson Tests
 # ==============================================================================
-
 def test_transform_json_data_creates_series_with_holes(sample_gappy_json: list[dict]):
     """
     Tests that transform_json_data creates a pd.Series with missing values (NaNs)
@@ -99,13 +98,12 @@ def test_load_file_invalid_name(tmp_path: Path, sample_gappy_json: list[dict]):
         json.dump(obj=sample_gappy_json, fp=f)
 
     with pytest.raises(ValueError, match="File name does not follow naming format"):
-        loader = DataLoaderJson(file_path=invalid_path)
+        _ = DataLoaderJson(file_path=invalid_path)
 
 
 # ==============================================================================
 # DataPreprocessorRaw Tests
 # ==============================================================================
-
 def test_preprocessor_r_p_fill_interpolates_holes(sample_gappy_json: list[dict]):
     """
     Tests that r_p_fill takes a pd.Series containing holes (NaNs), interpolates missing values
@@ -160,7 +158,6 @@ def test_preprocessor_di_fill_scales_and_fills(sample_gappy_json: list[dict]):
 # ==============================================================================
 # DataSaver Tests & Integration Pipeline
 # ==============================================================================
-
 def test_data_saver_save_csv(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """
     Tests saving a pandas Series to disk as a CSV file using DataSaver.
