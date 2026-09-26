@@ -1,8 +1,8 @@
+import datetime
 import json
 from pathlib import Path
 import re
 
-import datetime
 import pandas as pd
 
 from src.data.raw.data_preprocessor_raw import DataPreprocessorRaw
@@ -63,11 +63,10 @@ class DataLoaderJson:
         else:
             raise ValueError("File name does not follow naming format")
 
-    def run(self, file_path: Path, t_delta: datetime.timedelta):
+    def run(self, t_delta: datetime.timedelta):
         """
         Loads the specified time series, then fills them with the appropriate fill function from DataPreprocessorRaw
 
-        :param Path file_path: Path of the time series to be loaded
         :param datetime.timedelta t_delta: Time (in minutes) between data points in the time series (usually 15)
         """
 
