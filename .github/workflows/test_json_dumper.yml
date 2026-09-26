@@ -1,4 +1,4 @@
-name: Downloader Test
+name: Json Dumper Test
 
 on:
   pull_request_review:
