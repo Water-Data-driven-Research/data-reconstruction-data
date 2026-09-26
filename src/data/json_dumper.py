@@ -17,4 +17,4 @@ class JsonDumper:
         file_path.mkdir(parents=True, exist_ok=True)
         output_file_path = file_path / (file_name + ".json")
 
-        data.to_json(output_file_path, orient="records")
+        data.to_json(path_or_buf=output_file_path, orient="records", indent=4)
