@@ -73,8 +73,9 @@ class DataLoaderJson:
         if self.d_type == "registered" or self.d_type == "processed":
             func = DataPreprocessorRaw.r_p_fill
         elif self.d_type == "observed":
+            func = DataPreprocessorRaw.o_fill
         elif self.d_type == "discharge":
-            func = DataPreprocessorRaw.di_fill
+            func = DataPreprocessorRaw.d_fill
         else:
             raise ValueError("Unrecognized d_type")
 
