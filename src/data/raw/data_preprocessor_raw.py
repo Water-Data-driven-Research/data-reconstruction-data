@@ -39,7 +39,7 @@ class DataPreprocessorRaw:
             t_delta: datetime.timedelta
             ) -> pd.Series:
         """
-        Fill detected time series
+        Fill observed time series
         
         :param pd.Timestamp start_time: Timestamp of the first recorded data
         :param pd.Timestamp end_time: Timestamp of the last recorded data
