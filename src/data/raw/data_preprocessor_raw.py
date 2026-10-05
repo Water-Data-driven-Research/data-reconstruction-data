@@ -32,14 +32,14 @@ class DataPreprocessorRaw:
         return dummy_data['Data'].interpolate().drop(dummy_data.index[:4]).fillna(0)
 
     @staticmethod
-    def de_fill(
+    def o_fill(
             start_time: pd.Timestamp,
             end_time: pd.Timestamp,
             data: pd.Series,
             t_delta: datetime.timedelta
             ) -> pd.Series:
         """
-        Fill detected time series
+        Fill observed time series
         
         :param pd.Timestamp start_time: Timestamp of the first recorded data
         :param pd.Timestamp end_time: Timestamp of the last recorded data
@@ -64,7 +64,7 @@ class DataPreprocessorRaw:
         ).fillna(0)
 
     @staticmethod
-    def di_fill(
+    def d_fill(
             start_time: pd.Timestamp,
             end_time: pd.Timestamp,
             data: pd.Series,

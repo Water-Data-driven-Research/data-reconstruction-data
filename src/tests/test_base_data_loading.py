@@ -129,9 +129,9 @@ def test_preprocessor_r_p_fill_interpolates_holes(sample_gappy_json: list[dict])
     assert filled_series.loc["2023-01-01 01:15:00"] == 300.0
 
 
-def test_preprocessor_di_fill_scales_and_fills(sample_gappy_json: list[dict]):
+def test_preprocessor_d_fill_scales_and_fills(sample_gappy_json: list[dict]):
     """
-    Tests discharge filling (di_fill) logic: scales values down by 100, interpolates missing
+    Tests discharge filling (d_fill) logic: scales values down by 100, interpolates missing
     holes, and returns a clean pd.Series.
 
     :param list[dict] sample_gappy_json: Pytest fixture containing gappy mock JSON data.
@@ -143,7 +143,7 @@ def test_preprocessor_di_fill_scales_and_fills(sample_gappy_json: list[dict]):
     end_time = raw_series.index.max()
     t_delta = datetime.timedelta(minutes=15)
 
-    filled_series = DataPreprocessorRaw.di_fill(start_time=start_time,
+    filled_series = DataPreprocessorRaw.d_fill(start_time=start_time,
                                                 end_time=end_time,
                                                 data=raw_series,
                                                 t_delta=t_delta)
