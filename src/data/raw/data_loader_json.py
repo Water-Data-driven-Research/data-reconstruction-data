@@ -13,13 +13,21 @@ class DataLoaderJson:
     Base class for all data loaders
     """
 
-    def __init__(self, file_path: Path):
+    def __init__(self, t_delta: datetime.timedelta, file_path: Path):
+        """
+        Initializes the DataLoader class, and runs the data loading for the specified time series.
+
+        :param t_delta: The time between measurements in the time series (in minutes, usually 15)
+        :param file_path: The path of the time series (including the file itself)
+        """
+
         self.start_time: pd.Timestamp = pd.NaT
         self.end_time: pd.Timestamp = pd.NaT
         self.d_train_type: str = ""
         self.d_type: str = ""
         self.raw_data: pd.Series = pd.Series()
         self.file_name: str = ""
+        self.filled_data: pd.Series = pd.Series()
 
         self.d_type_translator: dict[str, str] = {
             "r": "registered",
@@ -28,9 +36,19 @@ class DataLoaderJson:
             "v": "discharge"
         }
 
+        self.run(t_delta=t_delta, file_path=file_path)
+
+    def run(self, t_delta: datetime.timedelta, file_path: Path):
+        """
+        Loads the specified time series, then fills them with the appropriate fill function from DataPreprocessorRaw
+
+        :param datetime.timedelta t_delta: Time (in minutes) between data points in the time series (usually 15)
+        :param Path file_path: Path of the file (including the file itself)
+        """
+
         self.load_file(file_path=file_path)
 
-        self.filled_data: pd.Series = pd.Series()
+        self.fill_data(t_delta=t_delta)
 
     def load_file(self, file_path: Path):
         """
@@ -63,13 +81,7 @@ class DataLoaderJson:
         else:
             raise ValueError("File name does not follow naming format")
 
-    def run(self, t_delta: datetime.timedelta):
-        """
-        Loads the specified time series, then fills them with the appropriate fill function from DataPreprocessorRaw
-
-        :param datetime.timedelta t_delta: Time (in minutes) between data points in the time series (usually 15)
-        """
-
+    def fill_data(self, t_delta: datetime.timedelta):
         if self.d_type == "registered" or self.d_type == "processed":
             func = DataPreprocessorRaw.r_p_fill
         elif self.d_type == "detected":
@@ -79,10 +91,10 @@ class DataLoaderJson:
         else:
             raise ValueError("Unrecognized d_type")
 
-        func(start_time=self.start_time,
-             end_time=self.end_time,
-             data=self.raw_data,
-             t_delta=t_delta)
+        self.filled_data = func(start_time=self.start_time,
+                                end_time=self.end_time,
+                                data=self.raw_data,
+                                t_delta=t_delta)
 
     @staticmethod
     def transform_json_data(data: list[dict], do_conversion: bool = True) -> pd.Series:
