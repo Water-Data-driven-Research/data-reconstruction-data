@@ -5,7 +5,7 @@ import re
 
 import pandas as pd
 
-from src.data.raw.data_preprocessor_raw import DataPreprocessorRaw
+from dr_data.data.raw.data_preprocessor_raw import DataPreprocessorRaw
 
 
 class DataLoaderJson:

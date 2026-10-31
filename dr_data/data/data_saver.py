@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from src import data_folder
+from dr_data import data_folder
 
 
 class DataSaver:

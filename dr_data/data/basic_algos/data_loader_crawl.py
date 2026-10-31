@@ -1,4 +1,4 @@
-from src.data.basic_algos.data_loader_rule_ml import DataLoaderRuleML
+from dr_data.data.basic_algos.data_loader_rule_ml import DataLoaderRuleML
 
 
 class DataLoaderCrawl(DataLoaderRuleML):

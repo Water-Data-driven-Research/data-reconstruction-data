@@ -3,8 +3,8 @@ import shutil
 
 import pytest
 
-from src.data_downloader import DataDownloader
-from src import data_folder
+from dr_data.data_downloader import DataDownloader
+from dr_data import data_folder
 
 
 @pytest.fixture(scope="module")

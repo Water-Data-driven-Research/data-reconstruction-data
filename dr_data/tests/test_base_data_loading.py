@@ -5,9 +5,9 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from src.data.raw.data_loader_json import DataLoaderJson
-from src.data.raw.data_preprocessor_raw import DataPreprocessorRaw
-from src.data.data_saver import DataSaver
+from dr_data.data.raw.data_loader_json import DataLoaderJson
+from dr_data.data.raw.data_preprocessor_raw import DataPreprocessorRaw
+from dr_data.data.data_saver import DataSaver
 
 
 @pytest.fixture
@@ -165,7 +165,7 @@ def test_data_saver_save_csv(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     :param Path tmp_path: Pytest temporary directory fixture.
     :param pytest.MonkeyPatch monkeypatch: Pytest fixture to temporarily override data_folder.
     """
-    monkeypatch.setattr(target="src.data.data_saver.data_folder", name=tmp_path)
+    monkeypatch.setattr(target="dr_data.data.data_saver.data_folder", name=tmp_path)
 
     saver = DataSaver()
     test_series = pd.Series(
@@ -192,7 +192,7 @@ def test_full_data_loading_pipeline(tmp_path: Path, sample_gappy_json: list[dict
     :param list[dict] sample_gappy_json: Pytest fixture containing gappy mock JSON data.
     :param pytest.MonkeyPatch monkeypatch: Pytest fixture to temporarily override data_folder.
     """
-    monkeypatch.setattr(target="src.data.data_saver.data_folder", name=tmp_path)
+    monkeypatch.setattr(target="dr_data.data.data_saver.data_folder", name=tmp_path)
 
     # 1. Setup raw JSON file
     file_name = "tr_123456_2023-01_2023-02.json"

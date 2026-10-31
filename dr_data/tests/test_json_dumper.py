@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 import pytest
 
-from src.data.json_dumper import JsonDumper
+from dr_data.data.json_dumper import JsonDumper
 
 
 @pytest.fixture

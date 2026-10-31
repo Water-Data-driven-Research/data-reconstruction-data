@@ -17,7 +17,7 @@ jobs:
           lfs: true
 
       - name: Build Docker image
-        run: docker build . -t test-json-dumper -f src/tests/Dockerfile_test_json_dumper
+        run: docker build . -t test-json-dumper -f dr_data/tests/Dockerfile_test_json_dumper
 
       - name: Run tests inside the container
         run: docker run --rm test-json-dumper

@@ -3,7 +3,7 @@ import zipfile
 
 import gdown
 
-from src import data_folder
+from dr_data import data_folder
 
 
 class DataDownloader:
