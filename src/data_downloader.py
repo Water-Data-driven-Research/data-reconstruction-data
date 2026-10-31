@@ -43,7 +43,7 @@ class DataDownloader:
         """
 
         if self.file_path.suffix == ".zip" and self.file_path.is_file():
-            with zipfile.ZipFile(self.file_path, "r") as zip_ref:
+            with zipfile.ZipFile(self.file_path, mode="r") as zip_ref:
                 zip_ref.extractall(data_folder)
 
             # Force Python to release open file handles left by gdown
