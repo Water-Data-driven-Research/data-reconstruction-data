@@ -29,6 +29,8 @@ class DataLoaderJson:
         self.file_name: str = ""
         self.filled_data: pd.Series = pd.Series()
 
+        self.t_delta = t_delta
+
         self.d_type_translator: dict[str, str] = {
             "r": "registered",
             "f": "processed",
