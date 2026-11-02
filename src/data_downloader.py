@@ -1,6 +1,6 @@
 import gc
-import zipfile
 from pathlib import Path
+import zipfile
 
 import gdown
 
