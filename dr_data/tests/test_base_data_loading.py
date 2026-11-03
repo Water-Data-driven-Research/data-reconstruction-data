@@ -72,11 +72,12 @@ def test_load_file_success(tmp_path: Path, sample_gappy_json: list[dict]):
     # Pattern: (\S{2})_(\d{6})_(\d{4}-\d{2})_(\d{4}-\d{2})
     file_name = "tr_123456_2023-01_2023-02.json"
     file_path = tmp_path / file_name
+    t_delta = datetime.timedelta(minutes=15)
 
     with open(file_path, "w") as f:
         json.dump(obj=sample_gappy_json, fp=f)
 
-    loader = DataLoaderJson(file_path=file_path)
+    loader = DataLoaderJson(t_delta=t_delta, file_path=file_path)
 
     assert loader.start_time == pd.to_datetime(arg="2023-01")
     assert loader.end_time == pd.to_datetime(arg="2023-02")
@@ -93,12 +94,13 @@ def test_load_file_invalid_name(tmp_path: Path, sample_gappy_json: list[dict]):
     :param list[dict] sample_gappy_json: Pytest fixture containing gappy mock JSON data.
     """
     invalid_path = tmp_path / "invalid_filename.json"
+    t_delta = datetime.timedelta(minutes=15)
 
     with open(invalid_path, "w") as f:
         json.dump(obj=sample_gappy_json, fp=f)
 
     with pytest.raises(ValueError, match="File name does not follow naming format"):
-        _ = DataLoaderJson(file_path=invalid_path)
+        _ = DataLoaderJson(t_delta=t_delta, file_path=invalid_path)
 
 
 # ==============================================================================
@@ -193,6 +195,7 @@ def test_full_data_loading_pipeline(tmp_path: Path, sample_gappy_json: list[dict
     :param pytest.MonkeyPatch monkeypatch: Pytest fixture to temporarily override data_folder.
     """
     monkeypatch.setattr(target="dr_data.data.data_saver.data_folder", name=tmp_path)
+    t_delta = datetime.timedelta(minutes=15)
 
     # 1. Setup raw JSON file
     file_name = "tr_123456_2023-01_2023-02.json"
@@ -201,7 +204,7 @@ def test_full_data_loading_pipeline(tmp_path: Path, sample_gappy_json: list[dict
         json.dump(obj=sample_gappy_json, fp=f)
 
     # 2. Load
-    loader = DataLoaderJson(file_path=file_path)
+    loader = DataLoaderJson(t_delta=t_delta, file_path=file_path)
 
     # 3. Preprocess holes
     processed_series = DataPreprocessorRaw.r_p_fill(
