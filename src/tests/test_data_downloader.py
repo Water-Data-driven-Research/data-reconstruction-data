@@ -41,28 +41,6 @@ def test_download_directory_exists(download_context: dict):
     assert data_folder.is_dir(), "The downloaded path is not a directory."
 
 
-def test_expected_subdirectories_exist(download_context: dict):
-    """
-    Verify all top-level extracted folders exist.
-
-    :param dict download_context: data related to the download
-    """
-
-    expected_folders = [
-        "csv_data",
-        "data",
-        "discharge",
-        "dl",
-        "eval_data",
-        "reconstructed_data",
-    ]
-
-    for folder_name in expected_folders:
-        folder_path = data_folder / folder_name
-        assert folder_path.exists(), f"Missing subfolder: {folder_name}"
-        assert folder_path.is_dir(), f"Expected {folder_name} to be a directory."
-
-
 def test_specific_files_exist(download_context: dict):
     """
     Verify specific key files exist inside their respective nested directories.
@@ -71,12 +49,9 @@ def test_specific_files_exist(download_context: dict):
     """
 
     expected_files = [
-        # csv_data structure
-        data_folder / "csv_data" / "Szegedhez" / "algyo_vizhozam.csv",
-        # data structure
-        data_folder / "data" / "tv_210888_2004-01_2010-01.json",
-        # reconstructed_data structure
-        data_folder / "reconstructed_data" / "Szeged" / "Szeged_dl_teszt.json",
+        data_folder / "tv_210888_2004-01_2010-01.json",
+        data_folder / "lf_130549_2010-03_2023-01.json",
+        data_folder / "te_210893_2004-01_2010-01.json"
     ]
 
     for file_path in expected_files:
