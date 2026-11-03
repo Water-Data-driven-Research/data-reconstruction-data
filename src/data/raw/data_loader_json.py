@@ -17,9 +17,9 @@ class DataLoaderJson:
         """
         Initializes the DataLoader class, and runs the data loading for the specified time series.
 
-        :param t_delta datetime.timedelta: The time between measurements in
+        :param datetime.timedelta t_delta: The time between measurements in
                                            the time series (in minutes, usually 15)
-        :param file_path: The path of the time series (including the file itself)
+        :param Path file_path: The path of the time series (including the file itself)
         """
 
         self.t_delta: datetime.timedelta = t_delta
