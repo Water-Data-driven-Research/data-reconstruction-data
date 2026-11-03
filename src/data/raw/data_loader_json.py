@@ -35,7 +35,7 @@ class DataLoaderJson:
         self.d_type_translator: dict[str, str] = {
             "r": "registered",
             "f": "processed",
-            "e": "detected",
+            "e": "observed",
             "v": "discharge"
         }
 
@@ -59,7 +59,7 @@ class DataLoaderJson:
         - start time (pd.Timestamp)
         - end time (pd.Timestamp)
         - time periods (d_train_type): test, train (str)
-        - types (d_type): registered, processed, detected (only main stations), discharge (only Makó) (str)
+        - types (d_type): registered, processed, observed (only main stations), discharge (only Makó) (str)
         Saves all this data as class variables alongside the data itself. The data is saved as a pd.Series and some
         transformations are made to it before saving.
 
@@ -87,10 +87,10 @@ class DataLoaderJson:
     def fill_data(self, t_delta: datetime.timedelta):
         if self.d_type == "registered" or self.d_type == "processed":
             func = DataPreprocessorRaw.r_p_fill
-        elif self.d_type == "detected":
-            func = DataPreprocessorRaw.de_fill
+        elif self.d_type == "observed":
+            func = DataPreprocessorRaw.o_fill
         elif self.d_type == "discharge":
-            func = DataPreprocessorRaw.di_fill
+            func = DataPreprocessorRaw.d_fill
         else:
             raise ValueError("Unrecognized d_type")
 

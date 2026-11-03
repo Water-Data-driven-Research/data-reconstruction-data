@@ -49,6 +49,7 @@ def test_specific_files_exist(download_context: dict):
     """
 
     expected_files = [
+        # data structure
         data_folder / "tv_210888_2004-01_2010-01.json",
         data_folder / "lf_130549_2010-03_2023-01.json",
         data_folder / "te_210893_2004-01_2010-01.json"
