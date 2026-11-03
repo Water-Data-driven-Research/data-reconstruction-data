@@ -22,6 +22,8 @@ class DataLoaderJson:
         :param file_path: The path of the time series (including the file itself)
         """
 
+        self.t_delta: datetime.timedelta = t_delta
+
         self.start_time: pd.Timestamp = pd.NaT
         self.end_time: pd.Timestamp = pd.NaT
         self.d_train_type: str = ""
@@ -29,8 +31,6 @@ class DataLoaderJson:
         self.raw_data: pd.Series = pd.Series()
         self.file_name: str = ""
         self.filled_data: pd.Series = pd.Series()
-
-        self.t_delta = t_delta
 
         self.d_type_translator: dict[str, str] = {
             "r": "registered",
