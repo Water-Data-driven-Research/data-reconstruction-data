@@ -12,19 +12,19 @@ class DataDownloader:
     Class for downloading time series related data
     """
 
-    def __init__(self, file_url: str, file_name: str, file_path: Path | None = None):
+    def __init__(self, file_url: str, file_name: str, folder_path: Path | None = None):
         """
         Downloads the data, unzips it and deletes the original zip file
 
         :param str file_url: The Google Drive url of the file to be downloaded
         :param str file_name: The name of the file to be downloaded
-        :param Path file_path: The path of the file where the data will be downloaded (e.g. path/to/file.json)
+        :param Path folder_path: Path of the output folder
         """
 
-        if file_path is None:
+        if folder_path is None:
             self.file_path = data_folder / "json" / file_name
         else:
-            self.file_path = file_path
+            self.file_path = folder_path / file_name
         self.file_path.parent.mkdir(parents=True, exist_ok=True)
 
         self.download(file_url=file_url)
