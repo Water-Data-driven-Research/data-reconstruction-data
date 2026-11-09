@@ -28,7 +28,7 @@ def test_dump_json_dataframe(tmp_path: Path, sample_df: pd.DataFrame):
     file_name = "test_df"
 
     # Call the method passing the temporary test directory
-    JsonDumper.dump_json(sample_df, file_name, file_path=tmp_path)
+    JsonDumper.dump_json(sample_df, file_name, folder_path=tmp_path)
 
     expected_file = tmp_path / f"{file_name}.json"
 
@@ -56,7 +56,7 @@ def test_dump_json_series(tmp_path: Path, sample_series: pd.Series):
 
     file_name = "test_series"
 
-    JsonDumper.dump_json(sample_series, file_name, file_path=tmp_path)
+    JsonDumper.dump_json(sample_series, file_name, folder_path=tmp_path)
 
     expected_file = tmp_path / f"{file_name}.json"
 
@@ -83,7 +83,7 @@ def test_dump_json_creates_nonexistent_directory(tmp_path: Path, sample_df: pd.D
     # Directory should not exist before running
     assert not nested_dir.exists()
 
-    JsonDumper.dump_json(sample_df, file_name, file_path=nested_dir)
+    JsonDumper.dump_json(sample_df, file_name, folder_path=nested_dir)
 
     # Directory and file should now exist
     assert nested_dir.exists()
